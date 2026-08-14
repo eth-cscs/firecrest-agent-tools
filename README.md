@@ -15,7 +15,8 @@ In [Claude Code](https://code.claude.com) (CLI, desktop app, or VS Code extensio
 
 | Plugin | Description |
 |---|---|
-| [firecrest](./firecrest) | Access CSCS HPC systems through FirecREST: system status, job monitoring, and file inspection. See the [plugin README](./firecrest/README.md) for setup and authentication. |
+| [firecrest](./firecrest) | Access CSCS HPC systems through FirecREST via the hosted MCP server. See the [plugin README](./firecrest/README.md) for setup and authentication. |
+| [firecrest-local](./firecrest-local) | Run the FirecREST MCP server locally in Docker with your own FirecREST client credentials — no hosted server required. See the [plugin README](./firecrest-local/README.md). |
 
 ## Using CSCS services outside Claude Code
 
