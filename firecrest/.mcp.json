@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "firecrest": {
+      "type": "http",
+      "url": "${FIRECREST_MCP_URL:-https://mcp.firecrest.cscs.ch/mcp}"
+    }
+  }
+}

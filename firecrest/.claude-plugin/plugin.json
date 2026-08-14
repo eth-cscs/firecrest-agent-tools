@@ -1,0 +1,13 @@
+{
+  "name": "firecrest",
+  "version": "0.1.0",
+  "description": "Access CSCS HPC systems through FirecREST: system status, job monitoring, and file inspection.",
+  "author": {
+    "name": "CSCS - Swiss National Supercomputing Centre",
+    "url": "https://www.cscs.ch"
+  },
+  "homepage": "https://products.cscs.ch/#/product/firecrest",
+  "repository": "https://github.com/ekouts/claude-plugins",
+  "license": "BSD-3-Clause",
+  "keywords": ["hpc", "firecrest", "slurm", "cscs"]
+}
