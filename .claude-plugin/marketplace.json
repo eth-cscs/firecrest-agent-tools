@@ -1,0 +1,27 @@
+{
+  "name": "cscs",
+  "owner": {
+    "name": "CSCS - Swiss National Supercomputing Centre",
+    "url": "https://www.cscs.ch"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for CSCS services",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "firecrest",
+      "source": "./firecrest",
+      "description": "Access CSCS HPC systems through FirecREST: system status, job monitoring, and file inspection.",
+      "category": "hpc",
+      "keywords": ["hpc", "firecrest", "slurm", "cscs"]
+    },
+    {
+      "name": "firecrest-local",
+      "source": "./firecrest-local",
+      "description": "Run the FirecREST MCP server locally in Docker with your own FirecREST client credentials.",
+      "category": "hpc",
+      "keywords": ["hpc", "firecrest", "slurm", "cscs", "docker"]
+    }
+  ]
+}
