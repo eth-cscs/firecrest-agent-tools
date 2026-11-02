@@ -1,0 +1,11 @@
+# docker-compose.yml
+services:
+  mcp-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: firecrest-mcp
+    volumes:
+      - .env:/app/.env
+    ports:
+      - "8888:8888"
