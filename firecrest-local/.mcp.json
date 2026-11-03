@@ -12,6 +12,7 @@
         "-e", "OAUTH_TOKEN_URL",
         "-e", "OAUTH_SCOPES",
         "-e", "BACKEND_API_BASE_URL",
+        "-e", "REQUEST_STATS_MAX_RECORDS",
         "${FIRECREST_MCP_IMAGE:-firecrest-mcp}",
         "uv", "run", "src/server.py", "--transport", "stdio"
       ]

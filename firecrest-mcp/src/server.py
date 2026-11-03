@@ -3,6 +3,7 @@ from fastmcp import FastMCP
 from config import settings
 import firecrest as fc
 import argparse
+import datetime
 import logging
 
 
@@ -14,10 +15,39 @@ auth = fc.ClientCredentialsAuth(
     token_uri=settings.oauth_token_url,
 )
 
+# Every HTTP request the client sends to FirecREST (retries included) is
+# counted and recorded in ``client.request_stats`` (pyfirecrest newer than
+# 3.10.0, see https://github.com/eth-cscs/pyfirecrest/pull/223). Older
+# versions of pyfirecrest have no such attribute: the server still works, but
+# the statistics tools report that nothing is being recorded.
+if hasattr(fc.v2, "RequestStats"):
+    request_stats = fc.v2.RequestStats(
+        max_records=settings.request_stats_max_records or None
+    )
+    client_kwargs = {"request_stats": request_stats}
+else:
+    request_stats = None
+    client_kwargs = {}
+
 client = fc.v2.AsyncFirecrest(
     firecrest_url=settings.backend_api_base_url,
     authorization=auth,
+    **client_kwargs,
 )
+
+if request_stats is None:
+    logging.warning(
+        "The installed pyfirecrest does not record request statistics; "
+        "upgrade it to enable the get_request_stats tool"
+    )
+else:
+    request_stats.listeners.append(
+        lambda r: logging.info(
+            f"FirecREST request: {r.method} {r.endpoint} -> "
+            f"{r.status_code if r.status_code is not None else r.error} "
+            f"({r.duration:.3f}s, attempt {r.attempt})"
+        )
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -792,19 +822,109 @@ async def wait_for_job(
 
 
 # ---------------------------------------------------------------------------
+# Request statistics
+# ---------------------------------------------------------------------------
+# The statistics are global to the server process. Over stdio the process
+# serves a single Claude Code session, so they describe exactly what that
+# session did and the tools below are registered. Over HTTP the process is
+# shared by all the users, so the tools are not registered: they would expose
+# everyone's requests (endpoints, query parameters) to any user, and let any
+# user reset the counters. The per-request log lines are emitted in both modes.
+
+def _record_as_dict(record) -> Dict[str, Any]:
+    d = record.as_dict()
+    d["time"] = datetime.datetime.fromtimestamp(
+        record.timestamp, tz=datetime.timezone.utc
+    ).isoformat(timespec="milliseconds")
+    return d
+
+
+async def get_request_stats(last: int = 20) -> Dict[str, Any]:
+    """Get statistics about the HTTP requests this server has sent to the
+    FirecREST API since it started (or since the last reset).
+
+    Every request is counted, retries included. Use this to see how many
+    calls the tools translate to, which endpoints are hit, how long they
+    take and which ones fail.
+
+    Args:
+        last: Number of most recent requests to include in `records`
+            (0 for none). The server keeps the last
+            REQUEST_STATS_MAX_RECORDS requests (1000 by default, 0 for
+            all); the number kept is returned in `recorded`.
+
+    Returns:
+        Dict with the counters (total, retries, failed, total_duration,
+        average_duration, by_method, by_endpoint, by_status) and the most
+        recent requests under `records`, oldest first. Each record has the
+        method, endpoint, query params, status code or error, duration,
+        time, attempt number and tracing IDs.
+    """
+    logging.info("Invoking get_request_stats tool")
+    if request_stats is None:
+        return {
+            "enabled": False,
+            "message": "The installed pyfirecrest does not record request "
+                       "statistics (a release newer than 3.10.0 is needed).",
+        }
+
+    stats = request_stats.as_dict()
+    records = stats.pop("records")
+    stats["average_duration"] = (
+        stats["total_duration"] / stats["total"] if stats["total"] else 0.0
+    )
+    stats["recorded"] = len(records)
+    stats["records"] = [
+        _record_as_dict(r) for r in request_stats.records[-last:]
+    ] if last > 0 else []
+    return {"enabled": request_stats.enabled, **stats}
+
+
+async def reset_request_stats() -> Dict[str, Any]:
+    """Reset the request statistics of this server: the counters go back
+    to zero and the history of requests is cleared. The FirecREST API and
+    the HPC systems are not touched.
+
+    Returns:
+        Dict with the counters that were discarded (total, retries, failed).
+    """
+    logging.info("Invoking reset_request_stats tool")
+    if request_stats is None:
+        return {"enabled": False, "total": 0, "retries": 0, "failed": 0}
+
+    discarded = {
+        "total": request_stats.total,
+        "retries": request_stats.retries,
+        "failed": request_stats.failed,
+    }
+    request_stats.reset()
+    return {"enabled": request_stats.enabled, **discarded}
+
+
+# ---------------------------------------------------------------------------
 # Server entry point
 # ---------------------------------------------------------------------------
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--transport", choices=["http", "stdio"], default="http")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8888)
     return parser.parse_args()
 
 
+def register_request_stats_tools():
+    mcp.tool(get_request_stats)
+    mcp.tool(reset_request_stats)
+
+
 def main(args):
-    # FIXME: stateless_http=True was added to simplify the invokations debugging during development (implications unclear!)
-    mcp.run(transport="http", stateless_http=True, host=args.host, port=args.port)
+    if args.transport == "stdio":
+        register_request_stats_tools()
+        mcp.run(transport="stdio")
+    else:
+        # FIXME: stateless_http=True was added to simplify the invokations debugging during development (implications unclear!)
+        mcp.run(transport="http", stateless_http=True, host=args.host, port=args.port)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,12 @@
+# Credentials
+.env
+.env_*
+
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+uv.lock
+build/
+dist/
+*.egg-info
