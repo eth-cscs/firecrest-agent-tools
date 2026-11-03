@@ -26,7 +26,14 @@ docker compose build        # produces the image tagged "firecrest-mcp"
 ### 2. Export your credentials
 
 In the shell you start Claude Code from (for example in `~/.zshrc`, or a
-dedicated env file you `source`):
+dedicated env file you `source`). If you already filled in
+`firecrest-mcp/.env` for the server, export the same values with:
+
+```bash
+set -a; source firecrest-mcp/.env; set +a
+```
+
+Otherwise:
 
 ```bash
 export OAUTH_CLIENT_ID=<your-client-id>

@@ -32,7 +32,7 @@ commented out, so they are not exposed.
 > Note: This is a local instance, we aim to produce an MCP that runs in a public environment as an MCP server (ie, `https://mcp.firecrest.cscs.ch`) able to be used in a plugin.
 
 1. Install (if you don't have it yet) docker compose
-2. Clone this repository, go to this directory (`firecrest-mcp/`), and create a `.env` file with the following values according to your FirecREST configuration:
+2. Clone this repository, go to this directory (`firecrest-mcp/`), copy `.env.example` to `.env` (git ignores it) and fill in the values according to your FirecREST configuration:
 
     - `OAUTH_CLIENT_ID`: Client ID
     - `OAUTH_CLIENT_SECRET`: Client Secret
