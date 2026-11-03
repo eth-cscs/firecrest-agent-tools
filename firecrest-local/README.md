@@ -9,7 +9,7 @@ image from source and use your own FirecREST client credentials.
 
 - [Docker](https://docs.docker.com/get-docker/) running locally
 - [Claude Code](https://code.claude.com) (CLI, desktop app, or VS Code extension)
-- Access to the [firecrest-mcp repository](https://git.cscs.ch/iram/firecrest-mcp)
+- A clone of this repository: the server source is in [`firecrest-mcp/`](../firecrest-mcp)
 - FirecREST OAuth client credentials (client id and secret) and the token/API
   URLs of the FirecREST deployment you use
 
@@ -18,8 +18,8 @@ image from source and use your own FirecREST client credentials.
 ### 1. Build the server image
 
 ```bash
-git clone git@git.cscs.ch:iram/firecrest-mcp.git
-cd firecrest-mcp
+git clone https://github.com/eth-cscs/firecrest-agent-tools.git
+cd firecrest-agent-tools/firecrest-mcp
 docker compose build        # produces the image tagged "firecrest-mcp"
 ```
 
@@ -78,9 +78,20 @@ export FIRECREST_MCP_IMAGE=firecrest-mcp:dev
 
 ## Notes
 
-- All operations use the identity behind your client credentials. The server
-  currently exposes read-only tools (system status, job monitoring, file
-  inspection).
+- All operations use the identity behind your client credentials.
+- The server exposes the tools listed in the
+  [server README](../firecrest-mcp/README.md#tools). In short: system status,
+  job monitoring and file inspection, plus **job submission, cancellation and
+  attaching a command to a running job**, and downloading a file into the
+  container. Tools that modify the remote file system (mkdir, move, copy,
+  remove, upload, chmod, chown, compress, extract) are present in the source
+  but disabled.
+- Over stdio the server also exposes `get_request_stats` and
+  `reset_request_stats`, which show how many requests the server has sent to
+  FirecREST in this session (needs a pyfirecrest release newer than 3.10.0 in
+  the image). The last 1000 requests are kept; export
+  `REQUEST_STATS_MAX_RECORDS` before starting Claude Code to change that (`0`
+  keeps all of them).
 - After changing the server source, rebuild with `docker compose build`; new
   Claude Code sessions pick up the new image automatically.
 

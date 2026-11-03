@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     oauth_token_url: str
     oauth_scopes: str
     backend_api_base_url: str
+    # How many of the most recent requests to FirecREST are kept in the
+    # history returned by get_request_stats; 0 keeps all of them
+    request_stats_max_records: int = 1000
 
     class Config:
         env_file = ".env"

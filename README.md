@@ -11,6 +11,7 @@ This repository collects the integrations that let agents such as Claude Code us
 |---|---|
 | Claude Code plugins | A plugin marketplace (`cscs`) with plugins that connect Claude Code to FirecREST, either through the hosted MCP server or a locally run one. |
 | Skills | Task-oriented instructions bundled with the plugins, such as monitoring a Slurm job and inspecting its output. |
+| MCP server | The source of the FirecREST MCP server (`firecrest-mcp/`), which the `firecrest-local` plugin builds and runs in Docker. |
 
 More agent frameworks and standalone skill files may be added over time.
 
@@ -37,6 +38,7 @@ Plugins only work in Claude Code. On claude.ai or in the Claude Desktop chat app
 .claude-plugin/marketplace.json    # Claude Code marketplace manifest (must live at the repo root)
 firecrest/                         # Claude Code plugin: hosted MCP server + skills
 firecrest-local/                   # Claude Code plugin: MCP server in local Docker
+firecrest-mcp/                     # Source of the MCP server (Dockerfile, docker-compose, src/)
 .github/workflows/                 # CI: validates the marketplace and plugin manifests
 ```
 
