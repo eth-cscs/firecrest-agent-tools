@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: firecrest-mpc
+  IMAGE_NAME: ${{ github.repository_owner }}/firecrest-mpc
 
 jobs:
   build-and-push:
