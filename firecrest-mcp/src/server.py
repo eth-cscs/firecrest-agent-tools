@@ -303,242 +303,242 @@ async def stat_path(
 # File attribute operations
 # ---------------------------------------------------------------------------
 
-# @mcp.tool()
-# async def chmod(system_name: str, path: str, mode: str) -> Dict[str, Any]:
-#     """Change the permissions of a file or directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         path: Absolute path to the file or directory.
-#         mode: Permission mode string (e.g. "755", "644").
-#
-#     Returns:
-#         Dict with the result.
-#     """
-#     logging.info(f"Chmod {mode} on {system_name}:{path}")
-#     return await client.chmod(system_name=system_name, path=path, mode=mode)
+@mcp.tool()
+async def chmod(system_name: str, path: str, mode: str) -> Dict[str, Any]:
+    """Change the permissions of a file or directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        path: Absolute path to the file or directory.
+        mode: Permission mode string (e.g. "755", "644").
+
+    Returns:
+        Dict with the result.
+    """
+    logging.info(f"Chmod {mode} on {system_name}:{path}")
+    return await client.chmod(system_name=system_name, path=path, mode=mode)
 
 
-# @mcp.tool()
-# async def chown(
-#     system_name: str,
-#     path: str,
-#     owner: str,
-#     group: str,
-# ) -> Dict[str, Any]:
-#     """Change the owner and group of a file or directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         path: Absolute path to the file or directory.
-#         owner: New owner username.
-#         group: New group name.
-#
-#     Returns:
-#         Dict with the result.
-#     """
-#     logging.info(f"Chown {owner}:{group} on {system_name}:{path}")
-#     return await client.chown(
-#         system_name=system_name,
-#         path=path,
-#         owner=owner,
-#         group=group,
-#     )
+@mcp.tool()
+async def chown(
+    system_name: str,
+    path: str,
+    owner: str,
+    group: str,
+) -> Dict[str, Any]:
+    """Change the owner and group of a file or directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        path: Absolute path to the file or directory.
+        owner: New owner username.
+        group: New group name.
+
+    Returns:
+        Dict with the result.
+    """
+    logging.info(f"Chown {owner}:{group} on {system_name}:{path}")
+    return await client.chown(
+        system_name=system_name,
+        path=path,
+        owner=owner,
+        group=group,
+    )
 
 
 # ---------------------------------------------------------------------------
 # File manipulation operations
 # ---------------------------------------------------------------------------
 
-# @mcp.tool()
-# async def mkdir(
-#     system_name: str,
-#     path: str,
-#     create_parents: bool = False,
-# ) -> Dict[str, Any]:
-#     """Create a directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         path: Absolute path of the directory to create.
-#         create_parents: Create parent directories as needed (like mkdir -p).
-#
-#     Returns:
-#         Dict with the result.
-#     """
-#     logging.info(f"Mkdir {system_name}:{path}")
-#     return await client.mkdir(
-#         system_name=system_name,
-#         path=path,
-#         create_parents=create_parents,
-#     )
+@mcp.tool()
+async def mkdir(
+    system_name: str,
+    path: str,
+    create_parents: bool = False,
+) -> Dict[str, Any]:
+    """Create a directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        path: Absolute path of the directory to create.
+        create_parents: Create parent directories as needed (like mkdir -p).
+
+    Returns:
+        Dict with the result.
+    """
+    logging.info(f"Mkdir {system_name}:{path}")
+    return await client.mkdir(
+        system_name=system_name,
+        path=path,
+        create_parents=create_parents,
+    )
 
 
-# @mcp.tool()
-# async def create_symlink(
-#     system_name: str,
-#     source_path: str,
-#     link_path: str,
-# ) -> Dict[str, Any]:
-#     """Create a symbolic link on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         source_path: Absolute path that the symlink will point to.
-#         link_path: Absolute path of the symlink to create.
-#
-#     Returns:
-#         Dict with the result.
-#     """
-#     logging.info(f"Symlink {system_name}:{link_path} -> {source_path}")
-#     return await client.symlink(
-#         system_name=system_name,
-#         source_path=source_path,
-#         link_path=link_path,
-#     )
+@mcp.tool()
+async def create_symlink(
+    system_name: str,
+    source_path: str,
+    link_path: str,
+) -> Dict[str, Any]:
+    """Create a symbolic link on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        source_path: Absolute path that the symlink will point to.
+        link_path: Absolute path of the symlink to create.
+
+    Returns:
+        Dict with the result.
+    """
+    logging.info(f"Symlink {system_name}:{link_path} -> {source_path}")
+    return await client.symlink(
+        system_name=system_name,
+        source_path=source_path,
+        link_path=link_path,
+    )
 
 
-# @mcp.tool()
-# async def move_path(
-#     system_name: str,
-#     source_path: str,
-#     target_path: str,
-#     account: Optional[str] = None,
-#     blocking: bool = True,
-#     timeout: Optional[float] = None,
-# ) -> Dict[str, Any]:
-#     """Move or rename a file or directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         source_path: Absolute path of the source.
-#         target_path: Absolute path of the destination.
-#         account: Account/project for the transfer job.
-#         blocking: Wait for the operation to complete.
-#         timeout: Maximum time to wait for the job to complete.
-#
-#     Returns:
-#         Dict with the result.
-#     """
-#     logging.info(f"Move {system_name}:{source_path} -> {target_path}")
-#     return await client.mv(
-#         system_name=system_name,
-#         source_path=source_path,
-#         target_path=target_path,
-#         account=account,
-#         blocking=blocking,
-#         timeout=timeout,
-#     )
+@mcp.tool()
+async def move(
+    system_name: str,
+    source_path: str,
+    target_path: str,
+    account: Optional[str] = None,
+    blocking: bool = True,
+    timeout: Optional[float] = None,
+) -> Dict[str, Any]:
+    """Move or rename a file or directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        source_path: Absolute path of the source.
+        target_path: Absolute path of the destination.
+        account: Account/project for the transfer job.
+        blocking: Wait for the operation to complete.
+        timeout: Maximum time to wait for the job to complete.
+
+    Returns:
+        Dict with the result.
+    """
+    logging.info(f"Move {system_name}:{source_path} -> {target_path}")
+    return await client.mv(
+        system_name=system_name,
+        source_path=source_path,
+        target_path=target_path,
+        account=account,
+        blocking=blocking,
+        timeout=timeout,
+    )
 
 
-# @mcp.tool()
-# async def copy_path(
-#     system_name: str,
-#     source_path: str,
-#     target_path: str,
-#     dereference: bool = False,
-#     account: Optional[str] = None,
-#     blocking: bool = True,
-#     timeout: Optional[float] = None,
-# ) -> Dict[str, Any]:
-#     """Copy a file or directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         source_path: Absolute path of the source.
-#         target_path: Absolute path of the destination.
-#         dereference: Dereference symbolic links when copying.
-#         account: Account/project for the transfer job.
-#         blocking: Wait for the operation to complete.
-#         timeout: Maximum time to wait for the job to complete.
-#
-#     Returns:
-#         Dict with the result.
-#     """
-#     logging.info(f"Copy {system_name}:{source_path} -> {target_path}")
-#     return await client.cp(
-#         system_name=system_name,
-#         source_path=source_path,
-#         target_path=target_path,
-#         dereference=dereference,
-#         account=account,
-#         blocking=blocking,
-#         timeout=timeout,
-#     )
+@mcp.tool()
+async def copy(
+    system_name: str,
+    source_path: str,
+    target_path: str,
+    dereference: bool = False,
+    account: Optional[str] = None,
+    blocking: bool = True,
+    timeout: Optional[float] = None,
+) -> Dict[str, Any]:
+    """Copy a file or directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        source_path: Absolute path of the source.
+        target_path: Absolute path of the destination.
+        dereference: Dereference symbolic links when copying.
+        account: Account/project for the transfer job.
+        blocking: Wait for the operation to complete.
+        timeout: Maximum time to wait for the job to complete.
+
+    Returns:
+        Dict with the result.
+    """
+    logging.info(f"Copy {system_name}:{source_path} -> {target_path}")
+    return await client.cp(
+        system_name=system_name,
+        source_path=source_path,
+        target_path=target_path,
+        dereference=dereference,
+        account=account,
+        blocking=blocking,
+        timeout=timeout,
+    )
 
 
-# @mcp.tool()
-# async def remove_path(
-#     system_name: str,
-#     path: str,
-#     account: Optional[str] = None,
-#     blocking: bool = True,
-#     timeout: Optional[float] = None,
-# ) -> Dict[str, Any]:
-#     """Remove a file or directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         path: Absolute path to remove.
-#         account: Account/project for the transfer job (only relevant when the
-#             file is not deleted directly).
-#         blocking: Wait for the operation to complete.
-#         timeout: Maximum time to wait for the job to complete.
-#
-#     Returns:
-#         Dict with the result, or empty dict if none returned.
-#     """
-#     logging.info(f"Remove {system_name}:{path}")
-#     result = await client.rm(
-#         system_name=system_name,
-#         path=path,
-#         account=account,
-#         blocking=blocking,
-#         timeout=timeout,
-#     )
-#     return result if result is not None else {}
+@mcp.tool()
+async def remove(
+    system_name: str,
+    path: str,
+    account: Optional[str] = None,
+    blocking: bool = True,
+    timeout: Optional[float] = None,
+) -> Dict[str, Any]:
+    """Remove a file or directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        path: Absolute path to remove.
+        account: Account/project for the transfer job (only relevant when the
+            file is not deleted directly).
+        blocking: Wait for the operation to complete.
+        timeout: Maximum time to wait for the job to complete.
+
+    Returns:
+        Dict with the result, or empty dict if none returned.
+    """
+    logging.info(f"Remove {system_name}:{path}")
+    result = await client.rm(
+        system_name=system_name,
+        path=path,
+        account=account,
+        blocking=blocking,
+        timeout=timeout,
+    )
+    return result if result is not None else {}
 
 
 # ---------------------------------------------------------------------------
 # File transfer
 # ---------------------------------------------------------------------------
 
-# @mcp.tool()
-# async def upload_file(
-#     system_name: str,
-#     local_file: str,
-#     directory: str,
-#     filename: str,
-#     account: Optional[str] = None,
-#     blocking: bool = True,
-#     transfer_method: str = "s3",
-# ) -> Dict[str, Any]:
-#     """Upload a local file to a remote directory on an HPC system.
-#
-#     Args:
-#         system_name: Target HPC system name.
-#         local_file: Path to the local file to upload.
-#         directory: Target directory on the remote filesystem.
-#         filename: Name of the file on the remote filesystem.
-#         account: Account/project for the transfer job (relevant for large files only).
-#         blocking: Wait for the transfer to complete (relevant for large files only).
-#         transfer_method: Method used to upload large files. One of "s3",
-#             "streamer", "wormhole" (default "wormhole").
-#
-#     Returns:
-#         Dict with transfer job info for large files, or empty dict for small files.
-#     """
-#     logging.info(f"Uploading {local_file} to {system_name}:{directory}/{filename}")
-#     result = await client.upload(
-#         system_name=system_name,
-#         local_file=local_file,
-#         directory=directory,
-#         filename=filename,
-#         account=account,
-#         blocking=blocking,
-#         transfer_method=transfer_method,
-#     )
-#     return result if result is not None else {}
+@mcp.tool()
+async def upload_file(
+    system_name: str,
+    local_file: str,
+    directory: str,
+    filename: str,
+    account: Optional[str] = None,
+    blocking: bool = True,
+    transfer_method: str = "s3",
+) -> Dict[str, Any]:
+    """Upload a local file to a remote directory on an HPC system.
+
+    Args:
+        system_name: Target HPC system name.
+        local_file: Path to the local file to upload.
+        directory: Target directory on the remote filesystem.
+        filename: Name of the file on the remote filesystem.
+        account: Account/project for the transfer job (relevant for large files only).
+        blocking: Wait for the transfer to complete (relevant for large files only).
+        transfer_method: Method used to upload large files. One of "s3",
+            "streamer", "wormhole" (default "wormhole").
+
+    Returns:
+        Dict with transfer job info for large files, or empty dict for small files.
+    """
+    logging.info(f"Uploading {local_file} to {system_name}:{directory}/{filename}")
+    result = await client.upload(
+        system_name=system_name,
+        local_file=local_file,
+        directory=directory,
+        filename=filename,
+        account=account,
+        blocking=blocking,
+        transfer_method=transfer_method,
+    )
+    return result if result is not None else {}
 
 
 @mcp.tool()
@@ -581,78 +581,78 @@ async def download_file(
 # Archive operations
 # ---------------------------------------------------------------------------
 
-# @mcp.tool()
-# async def compress_path(
-#     system_name: str,
-#     source_path: str,
-#     target_path: str,
-#     dereference: bool = False,
-#     compression: str = "gzip",
-#     match_pattern: Optional[str] = None,
-#     account: Optional[str] = None,
-#     blocking: bool = True,
-# ) -> str:
-#     """Compress a file or directory into an archive on an HPC system.
-#
-#     Args:
-#         system_name: HPC system name where the filesystem belongs.
-#         source_path: Absolute path to the source file or directory to compress.
-#         target_path: Absolute path for the newly created compressed archive.
-#         dereference: Dereference symbolic links when compressing.
-#         compression: Compression algorithm to use (default: "gzip").
-#         match_pattern: Optional glob pattern to filter files to compress.
-#         account: Account/project for the operation.
-#         blocking: Wait for the operation to complete.
-#
-#     Returns:
-#         Confirmation message.
-#     """
-#     logging.info(f"Compressing {system_name}:{source_path} -> {target_path}")
-#     await client.compress(
-#         system_name=system_name,
-#         source_path=source_path,
-#         target_path=target_path,
-#         dereference=dereference,
-#         compression=compression,
-#         match_pattern=match_pattern,
-#         account=account,
-#         blocking=blocking,
-#     )
-#     return f"Compressed {source_path} to {target_path} on {system_name}."
+@mcp.tool()
+async def compress(
+    system_name: str,
+    source_path: str,
+    target_path: str,
+    dereference: bool = False,
+    compression: str = "gzip",
+    match_pattern: Optional[str] = None,
+    account: Optional[str] = None,
+    blocking: bool = True,
+) -> str:
+    """Compress a file or directory into an archive on an HPC system.
+
+    Args:
+        system_name: HPC system name where the filesystem belongs.
+        source_path: Absolute path to the source file or directory to compress.
+        target_path: Absolute path for the newly created compressed archive.
+        dereference: Dereference symbolic links when compressing.
+        compression: Compression algorithm to use (default: "gzip").
+        match_pattern: Optional glob pattern to filter files to compress.
+        account: Account/project for the operation.
+        blocking: Wait for the operation to complete.
+
+    Returns:
+        Confirmation message.
+    """
+    logging.info(f"Compressing {system_name}:{source_path} -> {target_path}")
+    await client.compress(
+        system_name=system_name,
+        source_path=source_path,
+        target_path=target_path,
+        dereference=dereference,
+        compression=compression,
+        match_pattern=match_pattern,
+        account=account,
+        blocking=blocking,
+    )
+    return f"Compressed {source_path} to {target_path} on {system_name}."
 
 
-# @mcp.tool()
-# async def extract_archive(
-#     system_name: str,
-#     source_path: str,
-#     target_path: str,
-#     compression: str = "gzip",
-#     account: Optional[str] = None,
-#     blocking: bool = True,
-# ) -> str:
-#     """Extract an archive on an HPC system.
-#
-#     Args:
-#         system_name: HPC system name where the filesystem belongs.
-#         source_path: Absolute path to the archive to extract.
-#         target_path: Absolute path of an existing directory where files will be extracted.
-#         compression: Compression algorithm to use (default: "gzip").
-#         account: Account/project for the operation.
-#         blocking: Wait for the operation to complete.
-#
-#     Returns:
-#         Confirmation message.
-#     """
-#     logging.info(f"Extracting {system_name}:{source_path} -> {target_path}")
-#     await client.extract(
-#         system_name=system_name,
-#         source_path=source_path,
-#         target_path=target_path,
-#         compression=compression,
-#         account=account,
-#         blocking=blocking,
-#     )
-#     return f"Extracted {source_path} to {target_path} on {system_name}."
+@mcp.tool()
+async def extract_archive(
+    system_name: str,
+    source_path: str,
+    target_path: str,
+    compression: str = "gzip",
+    account: Optional[str] = None,
+    blocking: bool = True,
+) -> str:
+    """Extract an archive on an HPC system.
+
+    Args:
+        system_name: HPC system name where the filesystem belongs.
+        source_path: Absolute path to the archive to extract.
+        target_path: Absolute path of an existing directory where files will be extracted.
+        compression: Compression algorithm to use (default: "gzip").
+        account: Account/project for the operation.
+        blocking: Wait for the operation to complete.
+
+    Returns:
+        Confirmation message.
+    """
+    logging.info(f"Extracting {system_name}:{source_path} -> {target_path}")
+    await client.extract(
+        system_name=system_name,
+        source_path=source_path,
+        target_path=target_path,
+        compression=compression,
+        account=account,
+        blocking=blocking,
+    )
+    return f"Extracted {source_path} to {target_path} on {system_name}."
 
 
 # ---------------------------------------------------------------------------
@@ -800,7 +800,7 @@ async def wait_for_job(
     job_id: str,
     timeout: Optional[float] = None,
     not_found_timeout: float = 20.0,
-) -> Optional[Dict[str, Any]]:
+) -> List[Dict[str, Any]]:
     """Wait for a job to complete on an HPC system (blocking poll).
 
     Args:
